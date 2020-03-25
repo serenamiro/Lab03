@@ -50,7 +50,7 @@ public class Dictionary {
 	 * @param inputTextList
 	 * @return
 	 */
-	public List<RichWord> spellCheckTestLinear(List<String> inputTextList){
+	public List<RichWord> spellCheckTest(List<String> inputTextList){
 		long startTime = System.nanoTime();
 		List<RichWord> daRitornare = new LinkedList<RichWord>();
 		for(String s : inputTextList) {
@@ -71,7 +71,7 @@ public class Dictionary {
 		long startTime = System.nanoTime();
 		List<RichWord> daRitornare = new LinkedList<RichWord>();
 		for(String s : inputTextList) {
-			if (ricercaBinaria((String[]) this.elencoParole.toArray(), s) == -1) {
+			if (ricercaBinaria(elencoParole, s) == -1) {
 				// vuol dire che la parola non è stata trovata nel dizionario 
 				daRitornare.add(new RichWord(s, false));
 			}
@@ -81,7 +81,8 @@ public class Dictionary {
 		return daRitornare;
 	}
 	
-	public int ricercaBinaria(String array[], String daCercare) {
+	public int ricercaBinaria(List<String> elencoParole, String daCercare) {
+		String[] array = elencoParole.toArray(new String[0]);
 		int start = 0;
 		int end = array.length-1;
 		int centro = 0;
