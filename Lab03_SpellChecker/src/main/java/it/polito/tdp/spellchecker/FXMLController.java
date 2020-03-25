@@ -10,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
@@ -34,6 +35,9 @@ public class FXMLController {
 
     @FXML
     private TextArea txtOutput;
+    
+    @FXML
+    private Label txtTempo;
 
     @FXML
     private TextField txtFrase;
@@ -54,7 +58,7 @@ public class FXMLController {
     	dictionary.loadDictionary(comboSpell.getSelectionModel().getSelectedItem());
     	String inserita = txtInput.getText();
     	List<String> input = dictionary.ordineInput(inserita);
-    	List<RichWord> output = dictionary.spellCheckTest(input);
+    	List<RichWord> output = dictionary.spellCheckTestDichotomic(input);
     	String s = "";
     	if(output != null) {
     		for(RichWord w : output) {
@@ -62,10 +66,12 @@ public class FXMLController {
     		}
     		txtOutput.appendText(s);
         	txtFrase.appendText("The text contains "+output.size()+" errors.\n");
+        	txtTempo.setText("Tempo impiegato per la ricerva: "+dictionary.tempo());
         	return;
     	} else {
     		txtFrase.appendText("The text contains 0 errors.\n");
-    	}
+    		txtTempo.setText("Tempo impiegato per la ricerca: "+dictionary.tempo());
+    	} 
     }
 
     @FXML
@@ -75,6 +81,7 @@ public class FXMLController {
         assert btnSpell != null : "fx:id=\"btnSpell\" was not injected: check your FXML file 'Scene.fxml'.";
         assert txtOutput != null : "fx:id=\"txtOutput\" was not injected: check your FXML file 'Scene.fxml'.";
         assert txtFrase != null : "fx:id=\"txtFrase\" was not injected: check your FXML file 'Scene.fxml'.";
+        assert txtTempo != null : "fx:id=\"txtTempo\" was not injected: check your FXML file 'Scene.fxml'.";
         assert btnClear != null : "fx:id=\"btnClear\" was not injected: check your FXML file 'Scene.fxml'.";
         comboSpell.getItems().addAll("English", "Italian");
         comboSpell.setValue("English");

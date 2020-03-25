@@ -9,6 +9,7 @@ import java.util.List;
 public class Dictionary {
 	
 	private List<String> elencoParole;
+	String tempo = "";
 
 	public Dictionary() {
 		this.elencoParole = new LinkedList<String>();
@@ -49,13 +50,56 @@ public class Dictionary {
 	 * @param inputTextList
 	 * @return
 	 */
-	public List<RichWord> spellCheckTest(List<String> inputTextList){
+	public List<RichWord> spellCheckTestLinear(List<String> inputTextList){
+		long startTime = System.nanoTime();
 		List<RichWord> daRitornare = new LinkedList<RichWord>();
 		for(String s : inputTextList) {
 			if(!elencoParole.contains(s.toLowerCase())){
 				daRitornare.add(new RichWord(s,false));
 			} 
 		}
+		long elapsedNanos = System.nanoTime() - startTime;
+		tempo = ""+elapsedNanos;
 		return daRitornare;
+	}
+	
+	public String tempo() {
+		return tempo;
+	}
+	
+	public List<RichWord> spellCheckTestDichotomic (List<String> inputTextList){
+		long startTime = System.nanoTime();
+		List<RichWord> daRitornare = new LinkedList<RichWord>();
+		for(String s : inputTextList) {
+			if (ricercaBinaria((String[]) this.elencoParole.toArray(), s) == -1) {
+				// vuol dire che la parola non è stata trovata nel dizionario 
+				daRitornare.add(new RichWord(s, false));
+			}
+		}
+		long elapsedNanos = System.nanoTime() - startTime;
+		tempo = ""+elapsedNanos;
+		return daRitornare;
+	}
+	
+	public int ricercaBinaria(String array[], String daCercare) {
+		int start = 0;
+		int end = array.length-1;
+		int centro = 0;
+		while (start <= end) {
+			centro = (start + end)/2;
+			if(daCercare.compareTo(array[centro]) < 0) {
+				// confronto le parole per capire in che zona effettuare la ricerca
+				end = centro - 1;
+			} else {
+				if(daCercare.compareTo(array[centro]) > 0) {
+					start = centro + 1;
+				} else {
+					return centro; 
+					// Caso: daCercare.equals(array[centro])
+				}
+			}
+		}
+		// se arrivo qui, vuol dire che daCercare non è presente in array[]
+		return -1;
 	}
 }
