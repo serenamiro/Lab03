@@ -3,6 +3,7 @@ package it.polito.tdp.spellchecker.model;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -25,8 +26,9 @@ public class Dictionary {
 			BufferedReader br = new BufferedReader(fr);
 			String word;
 			while ((word = br.readLine()) != null) {
-				elencoParole.add(word);
+				elencoParole.add(word.toLowerCase());
 			}
+			Collections.sort(elencoParole);
 			br.close();
 		} catch (IOException e){
 			System.out.println("Errore nella lettura del file");
